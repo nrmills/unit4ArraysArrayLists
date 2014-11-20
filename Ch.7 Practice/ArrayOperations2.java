@@ -2,18 +2,19 @@
 public class ArrayOperations2
 {
     private int[] values;
+    private int[] newArray;
     int temp;
     int currentSize;
     public ArrayOperations2(int[] initialValues)
     {
         values = initialValues;
+        newArray = new int[values.length];
         currentSize = values.length;
     }
 
     public void swapFirstAndLast()
     {
         temp = values[0];
-        values[0] = values[values.length-1];
         values[values.length-1] = temp;
     }
 
@@ -32,7 +33,7 @@ public class ArrayOperations2
             }
         }
     }
-    
+
     public void replaceEvenElements(int replacement)
     {
         for( int index = 0; index < values.length; index++ )
@@ -43,7 +44,7 @@ public class ArrayOperations2
             }
         }
     }
-    
+
     public void replaceSmallElements()
     {
         for( int index = 1; index < values.length-1; index++ )
@@ -59,22 +60,33 @@ public class ArrayOperations2
             }
         }
     }
-    
+
     public void removeMiddleElement()
     {
         if( values.length % 2 == 0 )
         {
-            values[values.length/2] = values[currentSize-1];
-            values[(values.length/2)+1] = values[currentSize-1];
-            currentSize-=2;
+            for( int index = 0; index < values.length; index++ )
+            {
+                if( (index+1)*2 != values.length &&
+                    (index+1)*2 != (values.length+1))
+                    {
+                        newArray[index] = values[index];
+                    }
+            }
         }
         else
         {
-            values[(values.length/2)+1] = values[currentSize-1];
-            currentSize--;
-        }
+            for( int index = 0; index < values.length; index++ )
+            {
+                if( (index*2)+1 != values.length)
+                    {
+                        newArray[index] = values[index];
+                    }
+            }
+        } 
+        values = newArray;
     }
-    
+
     public void moveEvenElementsToFront()
     {
         for( int index = 0; index < values.length; index++ )
@@ -94,7 +106,7 @@ public class ArrayOperations2
             }
         }
     }
-    
+
     public int returnSecondLargest()
     {
         int secondLargest = 0;
@@ -109,11 +121,47 @@ public class ArrayOperations2
         }
         return secondLargest;
     }
-    
+
     public boolean checkIncreasingOrder()
     {
-        for( int index = 0; index < values.length; index++ )
+        temp = values[0];
+        for( int index = 1; index < values.length; index++ )
         {
+            if( temp > values[index] )
+            {
+                return false;
+            }
+            temp = values[index];
         }
+        return true;
+    }
+    
+    public boolean checkAdjacentDuplicates()
+    {
+        temp = values[0];
+        for( int index = 1; index < values.length; index++ )
+        {
+            if( temp == values[index] )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean checkDuplicateElements()
+    {
+        newArray = values;
+        for( int row = 0; row < values.length; row++ )
+        {
+            for( int col = 0; col < values.length; col++ )
+            {
+                if( values[row] == newArray[col] )
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
