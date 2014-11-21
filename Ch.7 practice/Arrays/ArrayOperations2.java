@@ -21,6 +21,7 @@ public class ArrayOperations2
     public void shiftRight()
     {
         temp = values[0];
+        int last = values[values.length-1];
         for( int index = 0; index < values.length; index++ )
         {
             if (index < values.length)
@@ -40,21 +41,22 @@ public class ArrayOperations2
         {
             if( values[index] % 2 == 0 )
             {
-                values[index] = 0;
+                values[index] = replacement;
             }
         }
     }
 
     public void replaceSmallElements()
     {
+        int prevValue = values[0];
         for( int index = 1; index < values.length-1; index++ )
         {
             temp = values[index];
-            if( values[index] < values[index-1])    
+            if( prevValue > values[index+1])    
             {
-                values[index] = values[index-1];
+                values[index] = prevValue;
             }
-            else if( values[index] < values[index+1] )
+            else
             {
                 values[index] = values[index+1];
             }
