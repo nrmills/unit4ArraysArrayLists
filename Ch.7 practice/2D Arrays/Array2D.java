@@ -11,7 +11,6 @@ public class Array2D
 
     public Array2D()
     {
-
     }
     
     public String toString()
