@@ -10,12 +10,18 @@ public class Cashier
         String name;
         double amount;
         
+        //Input All Customers
         while ( moreCustomers == true )
         {
-            System.out.println()
-            name = 
-            System.out.println()
-            s1.addSale
+            System.out.print("Enter Name: ");
+            name = input.next();
+            System.out.print("Enter Sale Amount: ");
+            amount = input.next();
+            System.out.println();
+            s1.addSale(name,amount);
         }
+        
+        //Print out Top Customer Name
+        s1.nameOfBestCustomer();
     }
 }

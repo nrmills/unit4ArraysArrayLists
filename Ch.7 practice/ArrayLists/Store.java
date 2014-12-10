@@ -4,33 +4,38 @@ public class Store
 {
     String highestName = "";
     int highestAmount = 0;
+    ArrayList<Customer> listOfCustomers = new ArrayList();
     public Store()
     {
-        ArrayList<Customer> listOfCustomers = new ArrayList();
     }
 
-    public void addSale(String customerName, double amount)
+    public void addSale(String customerName, String amount)
     {
-        Customer c1 = new Customer(customerName, amount);
-        for( int index = 0; index < ; index ++)
+        ArrayList<String> customer = new ArrayList(2);
+        customer.add(0,customerName);
+        customer.add(1,amount);
+        for( int index = 0; index < listOfCustomers.size(); index ++)
         {
-            if ( listOfCustomers.get(i).get(0).equals(customerName) )
+            if ( listOfCustomers.get(index).get(0).equals(customerName) )
             {
-                listOfCustomers.get(i).get(1) += amount;
+                double amount;
+                double prevAmount = listOfCustomers.get(index).get(1);
+                prevAmount += amount;
+                listOfCustomers.get(index).get(1) += amount;
                 break;
             }
         }
-        listOfCustomers.add(c1);
+        listOfCustomers.add(customer);
     }
 
     public String nameOfBestCustomer()
     {
-        for( int index = 0; index < listOfcustomers.size(); index++ )
+        for( int index = 0; index < listOfCustomers.size(); index++ )
         {
-            if( listOfCustomers.get(i).get(1) > highestAmount )
+            if( listOfCustomers.get(index).get(1) > highestAmount )
             {
-                highestName = listOfCustomers.get(i).get(0);
-                //highestAmount = listOfCustomers.get(i).get(1);
+                highestName = listOfCustomers.get(index).get(0);
+                //highestAmount = listOfCustomers.get(index).get(1);
             }
         }
         return highestName;
