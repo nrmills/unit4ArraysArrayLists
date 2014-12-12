@@ -10,23 +10,23 @@ public class Radar
     // stores the vector of the monster (dy and dx)
     private int dy;
     private int dx;
-    
+
     // stores whether each cell triggered detection for the current scan of the radar
     private boolean[][] currentScan;
-    
+
     // stores whether each cell triggered detection for the previous scan of the radar
     private boolean[][] lastScan;
-    
+
     // stores the frequency of occurrences for each vector
     private int[][] vectorAccumulator;
-    
+
     // location of the monster
     private int monsterLocationRow;
     private int monsterLocationCol;
 
     // probability that a cell will trigger a false detection (must be >= 0 and < 1)
     private double noiseFraction;
-    
+
     // number of scans of the radar since construction
     private int numScans;
 
@@ -41,19 +41,19 @@ public class Radar
         // initialize instance variables
         lastScan = new boolean[rows][cols]; // elements will be set to false
         currentScan = new boolean[rows][cols]; // elements will be set to false
-        vectorAccumulator = new int[5][5]; // elements will be set to 0
+        vectorAccumulator = new int[11][11]; // elements will be set to 0
         dy = initDy;
         dx = initDx;
-        
+
         // randomly set the location of the monster (can be explicity set through the
         //  setMonsterLocation method
         monsterLocationRow = (int)(Math.random() * rows);
         monsterLocationCol = (int)(Math.random() * cols);
-        
+
         noiseFraction = 0.05;
         numScans= 0;
     }
-    
+
     /**
      * Performs a scan of the radar. Noise is injected into the grid and the accumulator is updated.
      * 
@@ -68,7 +68,7 @@ public class Radar
                 lastScan[row][col] = currentScan[row][col];
             }
         }
-        
+
         // zero the current scan grid
         for(int row = 0; row < currentScan.length; row++)
         {
@@ -77,35 +77,66 @@ public class Radar
                 currentScan[row][col] = false;
             }
         }
-        
+
         // Update monster location and detect monster
         monsterLocationRow += dx;
         monsterLocationCol += dy;
         currentScan[monsterLocationRow][monsterLocationCol] = true;
-        
+
         // inject noise into the grid
         injectNoise();
-        
+
         // udpate the accumulator
-        for(int row = 0; row < currentScan.length; row++)
+        for(int row = 0; row < lastScan.length; row++)
         {
-            for(int col = 0; col < currentScan[0].length; col++)
+            for(int col = 0; col < lastScan[0].length; col++)
             {
-                for( int dy = 0; dy <= 5; dy++ )
+                if( lastScan[row][col] == true )
                 {
-                    for( int dx = 0; dx <= 5; dx++ )
+                    for( int checkDy = -5; checkDy <= 5; dy++ )
                     {
-                        if( lastScan[row][col] == true & currentScan[row+dy][col+dx] == true )
+                        for( int checkDx = -5; checkDx <= 5; dx++ )
                         {
-                            vectorAccumulator[dy][dx] += 1;
+                            if( currentScan[row+checkDy][col+checkDx] == true &
+                                row+checkDy >= 0 ||
+                                col+checkDx >= 0)
+                            {
+                                vectorAccumulator[checkDy+5][checkDx+5] += 1;
+                            }
                         }
                     }
                 }
             }
         }
-        
+
         // keep track of the total number of scans
         numScans++;
+    }
+
+    /**
+     * Returns the velocity (dy and dx) of the monster
+     * 
+     * @return the velocity (dy and dx) of the monster
+     */
+    public String getMonsterVelocity()
+    {
+        int greatestFrequency = 0;
+        int[] monsterVelocity = new int[2];
+        String output = "";
+        for( int dy = 0; dy < vectorAccumulator.length; dy++ )
+        {
+            for( int dx = 0; dx < vectorAccumulator[0].length; dx++ )
+            {
+                if( vectorAccumulator[dy][1] > greatestFrequency )
+                {
+                    monsterVelocity[0] = dy;
+                    monsterVelocity[1] = dx;
+                    greatestFrequency = vectorAccumulator[dy][1];
+                }
+            }
+        }
+        output = "DY "+monsterVelocity[0]+"\nDX "+monsterVelocity[1];
+        return output;
     }
 
     /**
@@ -120,12 +151,12 @@ public class Radar
         // remember the row and col of the monster's location
         monsterLocationRow = row;
         monsterLocationCol = col;
-        
+
         // update the radar grid to show that something was detected at the specified location
         currentScan[row][col] = true;
     }
-    
-     /**
+
+    /**
      * Sets the probability that a given cell will generate a false detection
      * 
      * @param   fraction    the probability that a given cell will generate a flase detection expressed
@@ -135,7 +166,7 @@ public class Radar
     {
         noiseFraction = fraction;
     }
-    
+
     /**
      * Returns true if the specified location in the radar grid triggered a detection.
      * 
@@ -147,21 +178,7 @@ public class Radar
     {
         return currentScan[row][col];
     }
-    
-    /**
-     * Returns the number of times that the specified location in the radar grid has triggered a
-     *  detection since the constructor of the radar object.
-     * 
-     * @param   row     the row of the location to query for accumulated detections
-     * @param   col     the column of the location to query for accumulated detections
-     * @return the number of times that the specified location in the radar grid has
-     *          triggered a detection since the constructor of the radar object
-     */
-    public int getAccumulatedDetection(int row, int col)
-    {
-        return accumulator[row][col];
-    }
-    
+
     /**
      * Returns the number of rows in the radar grid
      * 
@@ -171,7 +188,7 @@ public class Radar
     {
         return currentScan.length;
     }
-    
+
     /**
      * Returns the number of columns in the radar grid
      * 
@@ -181,7 +198,7 @@ public class Radar
     {
         return currentScan[0].length;
     }
-    
+
     /**
      * Returns the number of scans that have been performed since the radar object was constructed
      * 
@@ -191,7 +208,7 @@ public class Radar
     {
         return numScans;
     }
-    
+
     /**
      * Sets cells as falsely triggering detection based on the specified probability
      * 
@@ -210,5 +227,5 @@ public class Radar
             }
         }
     }
-    
+
 }
