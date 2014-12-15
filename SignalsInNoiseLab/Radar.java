@@ -50,7 +50,7 @@ public class Radar
         monsterLocationRow = (int)(Math.random() * rows);
         monsterLocationCol = (int)(Math.random() * cols);
 
-        noiseFraction = 0.05;
+        noiseFraction = 0.01;
         numScans= 0;
     }
 
@@ -93,13 +93,13 @@ public class Radar
             {
                 if( lastScan[row][col] == true )
                 {
-                    for( int checkDy = -5; checkDy <= 5; dy++ )
+                    for( int checkDy = -5; checkDy <= 5; checkDy++ )
                     {
-                        for( int checkDx = -5; checkDx <= 5; dx++ )
+                        for( int checkDx = -5; checkDx <= 5; checkDx++ )
                         {
-                            if( currentScan[row+checkDy][col+checkDx] == true &
-                                row+checkDy >= 0 ||
-                                col+checkDx >= 0)
+                            if( ((row+checkDy >= 0 && row+checkDy < getNumRows()) &&
+                                (col+checkDx >= 0 && col+checkDx < getNumCols())) &&
+                                currentScan[row+checkDy][col+checkDx] == true)
                             {
                                 vectorAccumulator[checkDy+5][checkDx+5] += 1;
                             }
@@ -127,15 +127,15 @@ public class Radar
         {
             for( int dx = 0; dx < vectorAccumulator[0].length; dx++ )
             {
-                if( vectorAccumulator[dy][1] > greatestFrequency )
+                if( vectorAccumulator[dy][dx] > greatestFrequency )
                 {
                     monsterVelocity[0] = dy;
                     monsterVelocity[1] = dx;
-                    greatestFrequency = vectorAccumulator[dy][1];
+                    greatestFrequency = vectorAccumulator[dy][dx];
                 }
             }
         }
-        output = "DY "+monsterVelocity[0]+"\nDX "+monsterVelocity[1];
+        output = "DY "+(monsterVelocity[0]-5)+"\nDX "+(monsterVelocity[1]-5);
         return output;
     }
 
