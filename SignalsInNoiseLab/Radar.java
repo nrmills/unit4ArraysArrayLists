@@ -36,7 +36,7 @@ public class Radar
      * @param   rows    the number of rows in the radar grid
      * @param   cols    the number of columns in the radar grid
      */
-    public Radar(int rows, int cols, int initDy, int initDx)
+    public Radar(int rows, int cols, int startPosY, int startPosX, int initDy, int initDx)
     {
         // initialize instance variables
         lastScan = new boolean[rows][cols]; // elements will be set to false
@@ -44,12 +44,8 @@ public class Radar
         vectorAccumulator = new int[11][11]; // elements will be set to 0
         dy = initDy;
         dx = initDx;
-
-        // randomly set the location of the monster (can be explicity set through the
-        //  setMonsterLocation method
-        monsterLocationRow = (int)(Math.random() * rows);
-        monsterLocationCol = (int)(Math.random() * cols);
-
+        monsterLocationRow = startPosY;
+        monsterLocationCol = startPosX;
         noiseFraction = 0.01;
         numScans= 0;
     }

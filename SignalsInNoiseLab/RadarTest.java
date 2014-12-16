@@ -48,13 +48,21 @@ public class RadarTest
     @Test
     public void testVelocity()
     {
-        Radar r1 = new Radar( 150, 150, 2, 2 );
-        r1.setMonsterLocation(0,0);
+        //Test 1
+        Radar r1 = new Radar( 150, 150, 0, 0, 2, 2 );
         for( int iterations = 0; iterations < 50; iterations++ )
         {
             r1.scan();
         }
         assertEquals(("DY "+2+"\nDX "+2),r1.getMonsterVelocity());
+        
+        //Test 2
+        Radar r2 = new Radar( 100, 100, 10, 10, 1, 1 );
+        for( int iterations = 0; iterations < 50; iterations++ )
+        {
+            r2.scan();
+        }
+        assertEquals(("DY "+1+"\nDX "+1),r2.getMonsterVelocity());
     }
 
 }
